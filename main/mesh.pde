@@ -762,10 +762,6 @@ Mesh loadMeshVTS(String fn) {
     if(type==0) {tm[t(cc)]=3; int c=s(cc); while(c!=cc) {c=s(c); tm[t(c)]=3;} }
     return Q;
     }
- 
-  void drawClosestProjections(Curve L) {
-    for (int p=0; p<L.n; p++) {drawLineToClosestProjection(L.P[p]);};  
-    }
     
   
  void drawLineToClosestProjection(pt P) {
