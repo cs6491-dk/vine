@@ -69,6 +69,10 @@ vec[] Nt = new vec [maxnt];                // triangles normals
  int prevc = 0;                             // previously selected corner
  int rings=2;                           // number of rings for colorcoding
 
+ // Pseudo-Hamiltonian cycle
+ boolean[] phc_vm = new boolean[maxnv];
+ boolean[] phc_tm = new boolean[maxnt];
+
 //  ==================================== OFFSETS ====================================
  void offset() {
    normals();
@@ -276,6 +280,10 @@ void makeDChain (float w, int m) { // make a chain of size 2w wiht m elements
    for (int i=0; i<nc; i++) cm[i]=0;
    for (int i=0; i<nt; i++) tm[i]=0;
    for (int i=0; i<nt; i++) visible[i]=true;
+
+   for (int i=0; i<nv; i++) phc_vm[i]=false;
+   for (int i=0; i<nt; i++) phc_tm[i]=false;
+
    return this;
    }
  
@@ -545,7 +553,15 @@ void purge(int k) {for(int i=0; i<nt; i++) visible[i]=Mt[i]==k;} // hides triang
   // display front and back triangles shrunken if showEdges  
   Boolean frontFacing(int t) {return !cw(E,g(3*t),g(3*t+1),g(3*t+2)); } 
   void showFrontTrianglesSimple() {for(int t=0; t<nt; t++) if(frontFacing(t)) {if(showEdges) showShrunkT(t,1); else shade(t);}};  
-  void showFront() {for(int t=0; t<nt; t++) if(frontFacing(t)) shade(t);}  
+  void showFront() {
+    for(int t=0; t<nt; t++) {
+      if(frontFacing(t)) {
+        if (phc_tm[t]) fill(blue);
+        else fill(yellow);
+        shade(t);
+      }
+    }
+  }
   void showTs() {for(int t=0; t<nt; t++) simpleShade(t);}  
  
   void showBackTriangles() {for(int t=0; t<nt; t++) if(!frontFacing(t)) shade(t);};  
@@ -832,7 +848,20 @@ Mesh loadMeshVTS(String fn) {
     return c;
     }  
     
+// ============================================================= ARCHIVAL ============================================================
+  void makeCycle() {
+    makeCycle(0);
+    }
 
+  void makeCycle(int s) {
+    int c = s;                                               // start at the seed corner s
+    phc_vm[v(n(c))] = phc_vm[v(p(c))] = true;                // mark vertices as visited
+    do {
+      if (!phc_vm[v(c)]) phc_vm[v(c)] = phc_tm[t(c)] = true; // invade c.t
+      else if (!phc_tm[t(c)]) c = o(c);                      // go back one triangle
+      c = r(c);                                              // advance to next ring edge on the right
+    } while (c != o(s));                                     // until back at the beginning
+    }
      
   } // ==== END OF MESH CLASS
   

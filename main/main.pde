@@ -130,7 +130,7 @@ void keyReleased() {
 void keyPressed() {
   if(key=='a') {}
   if(key=='b') {}  // move S2 in XZ
-  if(key=='c') {}
+  if(key=='c') {M.makeCycle();}
   if(key=='d') {} 
   if(key=='e') {}
   if(key=='f') {}
