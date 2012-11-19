@@ -26,6 +26,7 @@ void initView() {Q=P(0,0,0); I=V(1,0,0); J=V(0,1,0); K=V(0,0,1); F = P(0,0,0); E
 
 // ******************************** MESHES ***********************************************
 Mesh M=new Mesh(); // meshes for models M0 and M1
+int phc_counter = 0;
 
 float volume1=0, volume0=0;
 float sampleDistance=1;
@@ -59,6 +60,15 @@ void draw() {
     return;
     } 
     
+  // ------------------------------ Iterate Mesh Cycle -------------------------
+  if (M.phc) {
+    if (phc_counter == 1) {
+      M.iterateCycle();
+      phc_counter = 0;
+    }
+    else phc_counter += 1;
+  }
+
   // -------------------------------------------------------- 3D display : set up view ----------------------------------
   camera(E.x, E.y, E.z, F.x, F.y, F.z, U.x, U.y, U.z); // defines the view : eye, ctr, up
   vec Li=U(A(V(E,F),0.1*d(E,F),J));   // vec Li=U(A(V(E,F),-d(E,F),J)); 

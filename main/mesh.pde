@@ -70,8 +70,11 @@ vec[] Nt = new vec [maxnt];                // triangles normals
  int rings=2;                           // number of rings for colorcoding
 
  // Pseudo-Hamiltonian cycle
+ boolean phc = false;
  boolean[] phc_vm = new boolean[maxnv];
  boolean[] phc_tm = new boolean[maxnt];
+ boolean[] phc_visible = new boolean[maxnt];
+ ArrayList<Integer> phc_invade;
 
 //  ==================================== OFFSETS ====================================
  void offset() {
@@ -283,6 +286,7 @@ void makeDChain (float w, int m) { // make a chain of size 2w wiht m elements
 
    for (int i=0; i<nv; i++) phc_vm[i]=false;
    for (int i=0; i<nt; i++) phc_tm[i]=false;
+   for (int i=0; i<nt; i++) phc_visible[i]=false;
 
    return this;
    }
@@ -555,7 +559,7 @@ void purge(int k) {for(int i=0; i<nt; i++) visible[i]=Mt[i]==k;} // hides triang
   void showFrontTrianglesSimple() {for(int t=0; t<nt; t++) if(frontFacing(t)) {if(showEdges) showShrunkT(t,1); else shade(t);}};  
   void showFront() {
     for(int t=0; t<nt; t++) {
-      if(frontFacing(t)) {
+      if(frontFacing(t) && (!phc || phc_visible[t])) {
         if (phc_tm[t]) fill(blue);
         else fill(yellow);
         shade(t);
@@ -848,12 +852,16 @@ Mesh loadMeshVTS(String fn) {
     return c;
     }  
     
-// ============================================================= ARCHIVAL ============================================================
+// ============================================================= PSEUDO HAMILTONIAN CYCLE ========================================================
   void makeCycle() {
     makeCycle(0);
-    }
+  }
 
   void makeCycle(int s) {
+    for (int i=0; i<nv; i++) phc_vm[i]=false;
+    for (int i=0; i<nt; i++) phc_tm[i]=false;
+    for (int i=0; i<nt; i++) phc_visible[i]=false;
+
     int c = s;                                               // start at the seed corner s
     phc_vm[v(n(c))] = phc_vm[v(p(c))] = true;                // mark vertices as visited
     do {
@@ -861,8 +869,45 @@ Mesh loadMeshVTS(String fn) {
       else if (!phc_tm[t(c)]) c = o(c);                      // go back one triangle
       c = r(c);                                              // advance to next ring edge on the right
     } while (c != o(s));                                     // until back at the beginning
+
+    phc_invade = new ArrayList();
+    phc_invade.add(t(c));
+    phc_visible[t(c)] = true;
+    while (true) {
+      c = s(c);
+      if (phc_tm[t(c)]) {
+        phc_invade.add(t(c));
+        phc_visible[t(c)] = true;
+        break;
+      }
     }
-     
+
+    phc = true;
+  }
+
+  void iterateCycle() {
+    int t, c, adjacent_t;
+    ArrayList<Integer> new_invade = new ArrayList();
+
+    for (int idx=0; idx < phc_invade.size(); idx++) {
+      t = phc_invade.get(idx);
+
+      c = c(t);
+      iterateCycle_helper(t(o(c)), t, new_invade);
+      iterateCycle_helper(t(l(c)), t, new_invade);
+      iterateCycle_helper(t(r(c)), t, new_invade);
+    }
+
+    phc_invade = new_invade;
+  }
+
+  void iterateCycle_helper(int at, int t, ArrayList<Integer> al) {
+    if ((phc_tm[at] == phc_tm[t]) && !phc_visible[at]) {
+      al.add(at);
+      phc_visible[at] = true;
+    }
+  }
+
   } // ==== END OF MESH CLASS
   
 vec labelD=new vec(-4,+4, 12);           // offset vector for drawing labels  
