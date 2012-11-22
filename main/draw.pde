@@ -1,7 +1,4 @@
-void drawCylinder(pt BC, pt TC, vec right, float radius, boolean half) {
-	//pushMatrix();
-	//camera(BC.x, BC.y, BC.z, TC.x, TC.y, TC.z, up.x, up.y, up.z);
-
+void drawVine(pt BC, pt TC, vec right, float radius, boolean half, int leaves) {
 	int radial_segments = 12;
 
 	vec axis = V(BC, TC);
@@ -27,5 +24,39 @@ void drawCylinder(pt BC, pt TC, vec right, float radius, boolean half) {
 	}
 	endShape();
 
-	//popMatrix();
+	float height = 4.5*radius,
+	      width = 2*radius;
+	if ((leaves % 4) == 1) {
+		angle = PI/6*((leaves % 5) + 1);
+		vec leaf_up = V(cos(angle), right, sin(angle), up);
+		vec leaf_right = N(axis, leaf_up).normalize();
+
+		beginShape(TRIANGLE_STRIP);
+		normal(axis.x, axis.y, axis.z);
+		v = P(BC, radius, leaf_up, 0.5, axis);
+		vertex(v.x, v.y, v.z);
+		v.add(height/2, leaf_up);
+		v.add(-width/2, leaf_right);
+		vertex(v.x, v.y, v.z);
+		v.add(width, leaf_right);
+		vertex(v.x, v.y, v.z);
+		v.add(-width/2, leaf_right);
+		v.add(height/2, leaf_up);
+		vertex(v.x, v.y, v.z);
+		endShape();
+
+		beginShape(TRIANGLE_STRIP);
+		normal(-axis.x, -axis.y, -axis.z);
+		v = P(BC, radius, leaf_up, 0.5, axis);
+		vertex(v.x, v.y, v.z);
+		v.add(height/2, leaf_up);
+		v.add(width/2, leaf_right);
+		vertex(v.x, v.y, v.z);
+		v.add(-width, leaf_right);
+		vertex(v.x, v.y, v.z);
+		v.add(width/2, leaf_right);
+		v.add(height/2, leaf_up);
+		vertex(v.x, v.y, v.z);
+		endShape();
+	}
 }

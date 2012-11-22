@@ -595,7 +595,7 @@ void purge(int k) {for(int i=0; i<nt; i++) visible[i]=Mt[i]==k;} // hides triang
             }
 
             vec right = N(Axis, Normal).normalize();
-            drawCylinder(Start, Center, right, radius, optimize);
+            drawVine(Start, Center, right, radius, optimize, c);
           }
         }
       }
