@@ -41,7 +41,7 @@ void setup() {
   initView(); // declares the local frames for 3D GUI
 
   // ***************** Load meshes
-  M.declareVectors().loadMeshVTS("data/sphereSmooth.vts");
+  M.declareVectors().loadMeshVTS("data/horse.vts");
   M.resetMarkers().computeBox().updateON(); // makes a cube around C[8]
   
   // ***************** Set view
@@ -52,7 +52,7 @@ void setup() {
   
 // ******************************************************************************************************************* DRAW      
 void draw() {  
-  background(black);
+  background(metal);
   // -------------------------------------------------------- Help ----------------------------------
   if(showHelpText) {
     camera(); // 2D display to show cutout
