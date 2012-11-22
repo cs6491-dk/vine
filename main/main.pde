@@ -11,7 +11,8 @@ GLU glu;
 
 // ****************************** GLOBAL VARIABLES FOR DISPLAY OPTIONS *********************************
 Boolean 
-  showMesh=true,
+  showMesh=false,
+  showVine=true,
   translucent=false,   
   showSilhouette=true, 
   showNMBE=true,
@@ -76,7 +77,8 @@ void draw() {
   specular(255,255,0); shininess(5);
   
      // -------------------------------------------------------- show mesh ----------------------------------   
-   if(showMesh) { fill(yellow); if(M.showEdges) stroke(white);  else noStroke(); M.showFront();} 
+   if(showMesh) { fill(yellow); if(M.showEdges) stroke(white);  else noStroke(); M.showFront();}
+   if(showVine) { noStroke(); M.showVine();}
    
     // -------------------------- pick mesh corner ----------------------------------   
    if(pressed) if (keyPressed&&(key=='.')) M.pickc(Pick());
@@ -159,7 +161,7 @@ void keyPressed() {
   if(key=='s') {}
   if(key=='t') {}
   if(key=='u') {}
-  if(key=='v') {} // move S2
+  if(key=='v') {showVine=!showVine;}
   if(key=='w') {}
   if(key=='x') {} // drag mesh vertex in xy (mouseDragged)
   if(key=='y') {}

@@ -566,6 +566,28 @@ void purge(int k) {for(int i=0; i<nt; i++) visible[i]=Mt[i]==k;} // hides triang
       }
     }
   }
+
+  void showVine() {
+    for (int t=0; t<nt; t++) {
+      if (!phc || phc_visible[t]) {
+        if (phc_tm[t]) fill(green);
+        else fill(green);
+
+        pt Center = P(g(c(t)), g(n(c(t))), g(p(c(t))));
+
+        for (int idx=0; idx<3; idx++) {
+          int c = c(t)+idx;
+          if (!phc || (phc_tm[t] == phc_tm[t(o(p(c)))])) {
+            pt Start = P(g(c), g(n(c)));
+            vec right = V(Start, g(n(c))).normalize();
+            drawCylinder(Start, Center, right, 3.0);//0.75);
+          }
+        }
+
+      }
+    }
+  }
+
   void showTs() {for(int t=0; t<nt; t++) simpleShade(t);}  
  
   void showBackTriangles() {for(int t=0; t<nt; t++) if(!frontFacing(t)) shade(t);};  
