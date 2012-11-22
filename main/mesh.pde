@@ -559,31 +559,45 @@ void purge(int k) {for(int i=0; i<nt; i++) visible[i]=Mt[i]==k;} // hides triang
   void showFrontTrianglesSimple() {for(int t=0; t<nt; t++) if(frontFacing(t)) {if(showEdges) showShrunkT(t,1); else shade(t);}};  
   void showFront() {
     for(int t=0; t<nt; t++) {
-      if(frontFacing(t) && (!phc || phc_visible[t])) {
-        if (phc_tm[t]) fill(blue);
-        else fill(yellow);
+      if(frontFacing(t)) {
+        if (phc_tm[t]) fill(brown);
+        else fill(dbrown);
         shade(t);
       }
     }
   }
 
-  void showVine() {
+  void showVine(boolean optimize) {
     for (int t=0; t<nt; t++) {
-      if (!phc || phc_visible[t]) {
-        if (phc_tm[t]) fill(green);
+      if ((!phc || phc_visible[t]) && (!optimize || frontFacing(t))) {
+        if (phc_tm[t]) fill(dgreen);
         else fill(green);
+        float radius = 3.0;
 
         pt Center = P(g(c(t)), g(n(c(t))), g(p(c(t))));
+        vec Normal = N(g(c(t)), g(n(c(t))), g(p(c(t)))).normalize();
+		pushMatrix();
+        translate(Center.x, Center.y, Center.z);
+        sphere(radius*0.96);
+        popMatrix();
 
         for (int idx=0; idx<3; idx++) {
           int c = c(t)+idx;
-          if (!phc || (phc_tm[t] == phc_tm[t(o(p(c)))])) {
+          int t_adjacent = t(o(p(c)));
+          if (!phc || (phc_tm[t] == phc_tm[t_adjacent])) {
             pt Start = P(g(c), g(n(c)));
-            vec right = V(Start, g(n(c))).normalize();
-            drawCylinder(Start, Center, right, 3.0);//0.75);
+            vec Axis = V(Start, Center);
+            if ((t > t_adjacent) || !phc_visible[t_adjacent]) { //Only draw the sphere once for each pair
+              pushMatrix();
+              translate(Start.x, Start.y, Start.z);
+              sphere(radius*0.96);
+              popMatrix();
+            }
+
+            vec right = N(Axis, Normal).normalize();
+            drawCylinder(Start, Center, right, radius, optimize);
           }
         }
-
       }
     }
   }

@@ -11,10 +11,10 @@ GLU glu;
 
 // ****************************** GLOBAL VARIABLES FOR DISPLAY OPTIONS *********************************
 Boolean 
-  showMesh=false,
+  showMesh=true,
   showVine=true,
   translucent=false,   
-  showSilhouette=true, 
+  showSilhouette=false,
   showNMBE=true,
   showHelpText=false; 
 
@@ -41,7 +41,7 @@ void setup() {
   initView(); // declares the local frames for 3D GUI
 
   // ***************** Load meshes
-  M.declareVectors().loadMeshVTS("data/horse.vts");
+  M.declareVectors().loadMeshVTS("data/sphereSmooth.vts");
   M.resetMarkers().computeBox().updateON(); // makes a cube around C[8]
   
   // ***************** Set view
@@ -52,7 +52,7 @@ void setup() {
   
 // ******************************************************************************************************************* DRAW      
 void draw() {  
-  background(white);
+  background(black);
   // -------------------------------------------------------- Help ----------------------------------
   if(showHelpText) {
     camera(); // 2D display to show cutout
@@ -78,7 +78,7 @@ void draw() {
   
      // -------------------------------------------------------- show mesh ----------------------------------   
    if(showMesh) { fill(yellow); if(M.showEdges) stroke(white);  else noStroke(); M.showFront();}
-   if(showVine) { noStroke(); M.showVine();}
+   if(showVine) { noStroke(); M.showVine(showMesh);}
    
     // -------------------------- pick mesh corner ----------------------------------   
    if(pressed) if (keyPressed&&(key=='.')) M.pickc(Pick());
