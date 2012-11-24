@@ -25,38 +25,39 @@ void drawVine(pt BC, pt TC, vec right, float radius, boolean half, int leaves) {
 	endShape();
 
 	float height = 4.5*radius,
-	      width = 2*radius;
+	      width = 2*radius,
+	      depth = 0.5*radius;
 	if ((leaves % 4) == 1) {
 		angle = PI/6*((leaves % 5) + 1);
 		vec leaf_up = V(cos(angle), right, sin(angle), up);
 		vec leaf_right = N(axis, leaf_up).normalize();
+		vec leaf_front = N(leaf_right, leaf_up);
 
-		beginShape(TRIANGLE_STRIP);
-		normal(axis.x, axis.y, axis.z);
-		v = P(BC, radius, leaf_up, 0.5, axis);
-		vertex(v.x, v.y, v.z);
-		v.add(height/2, leaf_up);
-		v.add(-width/2, leaf_right);
-		vertex(v.x, v.y, v.z);
-		v.add(width, leaf_right);
-		vertex(v.x, v.y, v.z);
-		v.add(-width/2, leaf_right);
-		v.add(height/2, leaf_up);
-		vertex(v.x, v.y, v.z);
-		endShape();
+		pt leaf[] = new pt[5];
+		leaf[0] = P(BC, radius, leaf_up, 0.5, axis);					// bottom
+		leaf[1] = P(leaf[0], height/2, leaf_up, -depth, leaf_front);	// center
+		leaf[2] = P(leaf[0], height/2, leaf_up, -width/2, leaf_right);	// left
+		leaf[3] = P(leaf[2], width, leaf_right);						// right
+		leaf[4] = P(leaf[0], height, leaf_up);							// top
 
-		beginShape(TRIANGLE_STRIP);
-		normal(-axis.x, -axis.y, -axis.z);
-		v = P(BC, radius, leaf_up, 0.5, axis);
-		vertex(v.x, v.y, v.z);
-		v.add(height/2, leaf_up);
-		v.add(width/2, leaf_right);
-		vertex(v.x, v.y, v.z);
-		v.add(-width, leaf_right);
-		vertex(v.x, v.y, v.z);
-		v.add(width/2, leaf_right);
-		v.add(height/2, leaf_up);
-		vertex(v.x, v.y, v.z);
+		beginShape(TRIANGLE_FAN);
+		n = N(leaf[1], leaf[2], leaf[0]).normalize();
+		normal(n.x, n.y, n.z);
+		vertex(leaf[1].x, leaf[1].y, leaf[1].z);
+		vertex(leaf[0].x, leaf[0].y, leaf[0].z);
+		vertex(leaf[2].x, leaf[2].y, leaf[2].z);
+
+		n = N(leaf[1], leaf[4], leaf[2]).normalize();
+		normal(n.x, n.y, n.z);
+		vertex(leaf[4].x, leaf[4].y, leaf[4].z);
+
+		n = N(leaf[1], leaf[3], leaf[4]).normalize();
+		normal(n.x, n.y, n.z);
+		vertex(leaf[3].x, leaf[3].y, leaf[3].z);
+
+		n = N(leaf[1], leaf[0], leaf[3]).normalize();
+		normal(n.x, n.y, n.z);
+		vertex(leaf[0].x, leaf[0].y, leaf[0].z);
 		endShape();
 	}
 }
