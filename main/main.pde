@@ -6,13 +6,17 @@ import processing.opengl.*;                // load OpenGL libraries and utilitie
 import javax.media.opengl.*; 
 import javax.media.opengl.glu.*; 
 import java.nio.*;
+import processing.video.*;
 GL gl; 
 GLU glu; 
+
+boolean makeMovie = true;
+MovieMaker mm;
 
 // ****************************** GLOBAL VARIABLES FOR DISPLAY OPTIONS *********************************
 Boolean 
   showMesh=true,
-  showVine=true,
+  showVine=false,
   translucent=false,   
   showSilhouette=false,
   showNMBE=true,
@@ -33,6 +37,7 @@ float volume1=0, volume0=0;
 float sampleDistance=1;
 // *******************************************************************************************************************    SETUP
 void setup() {
+  Capture.list(); // Seems to hang on startup without this.  Not sure why.
   size(800, 800, OPENGL);  
   setColors(); sphereDetail(6); 
   PFont font = loadFont("GillSans-24.vlw"); textFont(font, 20);  // font for writing labels on //  PFont font = loadFont("Courier-14.vlw"); textFont(font, 12); 
@@ -48,6 +53,11 @@ void setup() {
  
   F=P(); E=P(0,0,500);
   for(int i=0; i<10; i++) vis[i]=true; // to show all types of triangles
+
+  // ***************** Movie Maker
+  if (makeMovie) {
+    mm = new MovieMaker(this, width, height, "vine.mov", 25, MovieMaker.MOTION_JPEG_B, MovieMaker.BEST);
+  }
   }
   
 // ******************************************************************************************************************* DRAW      
@@ -113,6 +123,11 @@ void draw() {
   // -------------------------------------------------------- SNAP PICTURE ---------------------------------- 
    if(snapping) snapPicture(); // does not work for a large screen
     pressed=false;
+
+  // -------------------------------------------------------- MOVIE -----------------------------------------
+  if (makeMovie) {
+    mm.addFrame();
+  }
 
  } // end draw
  
@@ -183,7 +198,7 @@ void keyPressed() {
   if(key=='N') {M.next();}
   if(key=='O') {}
   if(key=='P') {}
-  if(key=='Q') {exit();}
+  if(key=='Q') {if (makeMovie) mm.finish(); exit();}
   if(key=='R') {}
   if(key=='S') {M.swing();}
   if(key=='T') {}
