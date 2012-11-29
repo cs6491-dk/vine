@@ -58,7 +58,7 @@ Kyle Harrigan (kwharrigan@gatech.edu)
 
 %\section{Results}
 
-\bibliography{cs6491}
+%\bibliography{cs6491}
 
 \section{Project Description}
 
@@ -66,7 +66,22 @@ Given a triangle mesh, we are to build a pseudo-Hamiltonian cycle of vertices (m
 
 \section{Heuristic Approximation to Hamiltonian Cycle }
 
-Due to the computational complexity of calculating a true Hamiltonian cycle, the following algorithm \citation{Gurang2011}  is implemented. 
+Due to the computational complexity of calculating a true Hamiltonian cycle, the following algorithm is implemented. 
+
+{\tiny
+\begin{verbatim}
+void makeCycle(int s) {
+    int c = s;                                               // start at the seed corner s
+    phc_vm[v(n(c))] = true
+    phc_vm[v(p(c))] = true;                // mark vertices as visited
+     do {
+     if (!phc_vm[v(c)]) phc_vm[v(c)] = phc_tm[t(c)] = true; // invade c.t
+      else if (!phc_tm[t(c)]) c = o(c);                      // go back one triangle
+      c = r(c);                                              // advance to next ring edge on the right
+    } while (c != o(s));                                     // until back at the beginning
+    }
+\end{verbatim}
+}
 
 \section{Breadth First Invasion of Vine}
 
@@ -88,10 +103,9 @@ The vine leaves are drawn using \verb+TRIANGLE_FAN+.
 
 \section{Future Work}
 
+Improve drawing of leaves
+Speed
 
-A better canvas would make drawing easier.
-One possibility is a plane on which balls can be placed on, or a choice between several starting configurations.
-In addition, a toolbar style mode selection (Add Ball mode, Delete Ball mode) would make the application more user-friendly.
 
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{data/dsmith.png}}]{Donnie Smith} donnie.smith@gatech.edu
 \end{IEEEbiography}
