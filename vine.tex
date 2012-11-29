@@ -58,15 +58,15 @@ Kyle Harrigan (kwharrigan@gatech.edu)
 
 %\section{Results}
 
-%\bibliography{cs6491}
+\bibliography{cs6491}
 
 \section{Project Description}
 
-Given a triangle mesh, we are to build a pseudo-Hamiltonian cycle of vertices (meaning we only visit each edge once).   This cycle is used to essentially divide the triangle mesh into two parts.  These parts are colored differently to indicate which of the two sets they belong in.  Given this subdivision, we pick a root and simulate a vine growing alone each of these paths as a breadth first invasion. 
+Given a triangle mesh, we are to build a pseudo-Hamiltonian cycle of vertices (meaning we only visit each edge once).   This cycle is used to essentially divide the triangle mesh into two parts.  These parts are colored differently to indicate which of the two sets they belong to.  Given this subdivision, we pick a root and simulate a vine growing along each of these paths as a breadth first invasion. 
 
 \section{Heuristic Approximation to Hamiltonian Cycle }
 
-Due to the computational complexity of calculating a true Hamiltonian cycle, the following algorithm is implemented. 
+Due to the computational complexity of calculating a true Hamiltonian cycle, the following algorithm \citation{Gurang2011}  is implemented. 
 
 \section{Breadth First Invasion of Vine}
 
@@ -78,9 +78,12 @@ Due to the computational complexity of calculating a true Hamiltonian cycle, the
 \label{fig_angle}
 \end{figure}
 
-\section{Vine Drawing Specifics}
+\section{Showing the vine}
 
-The vines are drawn using  \verb+TRIANGLE_STRIP+. 
+The vine segments between triangle centers are drawn using  \verb+TRIANGLE_STRIP+.  Each vine segment is represented by some number of radial triangle strips.  In our examples, we used 12 radial segments in order to form the vine, which resulting in a fairly smooth shape that is visually pleasing.  
+
+At the intersection of each vine segment, a smooth interface must be formed so that the vine looks continuous.  For this purpose, a sphere was drawn at each intersection. 
+
 The vine leaves are drawn using \verb+TRIANGLE_FAN+. 
 
 \section{Future Work}
@@ -90,9 +93,9 @@ A better canvas would make drawing easier.
 One possibility is a plane on which balls can be placed on, or a choice between several starting configurations.
 In addition, a toolbar style mode selection (Add Ball mode, Delete Ball mode) would make the application more user-friendly.
 
-%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{main/data/dsmith.png}}]{Donnie Smith} donnie.smith@gatech.edu
-%\end{IEEEbiography}
-%
-%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{main/data/kwharrigan.jpg}}]{Kyle Harrigan} kwharrigan@gatech.edu
-%\end{IEEEbiography}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{data/dsmith.png}}]{Donnie Smith} donnie.smith@gatech.edu
+\end{IEEEbiography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{data/kwharrigan.jpg}}]{Kyle Harrigan} kwharrigan@gatech.edu
+\end{IEEEbiography}
 \end{document}
