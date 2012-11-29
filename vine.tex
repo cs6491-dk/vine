@@ -85,6 +85,11 @@ void makeCycle(int s) {
 
 \section{Breadth First Invasion of Vine}
 
+In order to progressively invade the two submeshes (inside and outside the cycle), two triangles (one inside and one outside) are initially marked visible, and their indices are added to a list.
+Before each subsequent frame is rendered, for each triangle in the list, all non-visible neighbors of those triangles which are on the same side of the cycle (again, inside or outside) are marked visible, and added to a new list.
+The new list is then swapped with the old list.
+
+In this way, the submeshes are invaded at one triangle per path per frame, and as paths in the submeshes branch, each path is invaded simultaneously.
 
 \begin{figure}[!h]
 \centering
@@ -95,11 +100,20 @@ void makeCycle(int s) {
 
 \section{Showing the vine}
 
-The vine segments between triangle centers are drawn using  \verb+TRIANGLE_STRIP+.  Each vine segment is represented by some number of radial triangle strips.  In our examples, we used 12 radial segments in order to form the vine, which resulting in a fairly smooth shape that is visually pleasing.  
+For each triangle, there are four control points: the center of the triangle, defined as the average of the three vertices, and one at the middle of each edge.
 
-At the intersection of each vine segment, a smooth interface must be formed so that the vine looks continuous.  For this purpose, a sphere was drawn at each intersection. 
+As the triangles are invaded, vines are drawn only on the invaded triangles, and only from the center control points to the edge control points corresponding to neighbor triangles on the same side of the cycle.
 
-The vine leaves are drawn using \verb+TRIANGLE_FAN+. 
+The vine segments between triangle centers are drawn as cylinders using  \verb+TRIANGLE_STRIP+.
+Each vine segment is represented by some number of radial triangle strips.
+In our examples, we used 12 radial segments in order to form the vine, which resulting in a fairly smooth shape that is visually pleasing.
+
+At the intersection of each vine segment, a smooth interface must be formed so that the vine looks continuous.
+For this purpose, a sphere was drawn at each intersection.
+
+The leaves are pseudo-randomly placed according to the index of the corner to the left of the edge control point being drawn.
+Each segment has a one in four chance of containing a leaf, and the angle formed by the leaf stalk with respect to the triangle is uniformly distributed between 0 and $\pi$ radians in increments of $\frac{\pi}{10}$.
+The vine leaves are drawn using \verb+TRIANGLE_FAN+.
 
 \section{Future Work}
 
