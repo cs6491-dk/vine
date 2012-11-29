@@ -24,11 +24,11 @@ void drawVine(pt BC, pt TC, vec right, float radius, boolean half, int leaves) {
 	}
 	endShape();
 
-	float height = 4.5*radius,
-	      width = 2*radius,
-	      depth = 0.5*radius;
+	float height = 10*radius,
+	      width = 4*radius,
+	      depth = 2*radius;
 	if ((leaves % 4) == 1) {
-		angle = PI/6*((leaves % 5) + 1);
+		angle = PI/10*((leaves % 5) + 3);
 		vec leaf_up = V(cos(angle), right, sin(angle), up);
 		vec leaf_right = N(axis, leaf_up).normalize();
 		vec leaf_front = N(leaf_right, leaf_up);
