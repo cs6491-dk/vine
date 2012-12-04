@@ -59,15 +59,14 @@ Kyle Harrigan (kwharrigan@gatech.edu)
 
 %\section{Results}
 
-%\bibliography{cs6491}
-
 \section{Project Description}
 
 Given a triangle mesh, we are to build a pseudo-Hamiltonian cycle of vertices (meaning we only visit each edge once).   This cycle is used to essentially divide the triangle mesh into two parts.  These parts are colored differently to indicate which of the two sets they belong to.  Given this subdivision, we pick a root and simulate a vine growing along each of these paths as a breadth first invasion. 
 
 \section{Heuristic Approximation to Hamiltonian Cycle }
 
-Due to the computational complexity of calculating a true Hamiltonian cycle, the following algorithm is implemented. 
+Due to the computational complexity of calculating a true Hamiltonian cycle, the following algorithm \cite{lr} is implemented. 
+
 
 {\tiny
 \begin{verbatim}
@@ -119,15 +118,8 @@ The vine leaves are drawn using \verb+TRIANGLE_FAN+.
 \section{Video}
 A video of the animation is available at \href{http://www.youtube.com/watch?v=kACJ5GA_PMc}{http://www.youtube.com/watch?v=kACJ5GA\_PMc}.
 
-\section{Future Work}
+\begin{thebibliography}{9}
+\bibitem{lr} Gurung, Topraj, Luffel, Mark, Lindstrom, Peter,  Rossignac, Jarec \textit{LR: Compact Connectivity Representation for Triangle Meshes}, (ACM Transactions on Graphics, 2011).
+\end{thebibliography}
 
-Improve drawing of leaves
-Speed
-
-
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{data/dsmith.png}}]{Donnie Smith} donnie.smith@gatech.edu
-\end{IEEEbiography}
-
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{data/kwharrigan.jpg}}]{Kyle Harrigan} kwharrigan@gatech.edu
-\end{IEEEbiography}
 \end{document}
