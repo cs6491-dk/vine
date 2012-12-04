@@ -568,10 +568,17 @@ void purge(int k) {for(int i=0; i<nt; i++) visible[i]=Mt[i]==k;} // hides triang
   }
 
   void showVine(boolean optimize) {
+    
     for (int t=0; t<nt; t++) {
       if ((!phc || phc_visible[t]) && (!optimize || frontFacing(t))) {
-        if (phc_tm[t]) fill(dgreen);
-        else fill(green);
+        if (phc_tm[t]) fill(green);
+        else {
+          if (renderBoth){
+            fill(dgreen);
+          }
+          else continue;                        
+        }
+        
         float radius = 3.0;
 
         pt Center = P(g(c(t)), g(n(c(t))), g(p(c(t))));

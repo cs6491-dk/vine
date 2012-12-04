@@ -10,7 +10,8 @@ import processing.video.*;
 GL gl; 
 GLU glu; 
 
-boolean makeMovie = true;
+boolean makeMovie = false;
+boolean renderBoth = false; // render both sides of phc or not
 MovieMaker mm;
 
 // ****************************** GLOBAL VARIABLES FOR DISPLAY OPTIONS *********************************
@@ -180,7 +181,7 @@ void keyPressed() {
   if(key=='w') {}
   if(key=='x') {} // drag mesh vertex in xy (mouseDragged)
   if(key=='y') {}
-  if(key=='z') {} // drag mesh vertex in xz (mouseDragged)
+  if(key=='z') {E.z -= 100;} 
    
   if(key=='A') {}
   if(key=='B') {}
@@ -207,7 +208,7 @@ void keyPressed() {
   if(key=='W') {M.saveMeshVTS();}
   if(key=='X') {} // drag mesh vertex in xy and neighbors (mouseDragged)
   if(key=='Y') {M.refine(); M.makeAllVisible();}
-  if(key=='Z') {} // drag mesh vertex in xz and neighbors (mouseDragged)
+  if(key=='Z') {E.z += 100;} // drag mesh vertex in xz and neighbors (mouseDragged)
 
   if(key=='`') {M.perturb();}
   if(key=='~') {}
